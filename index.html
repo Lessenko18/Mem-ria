@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulação de Fragmentação de Memória</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .memory-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .memory-block {
+            width: 80px;
+            height: 100px;
+            border: 2px solid #333;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            font-size: 14px;
+            color: #333;
+            text-align: center;
+        }
+
+        .memory-block .used {
+            background-color: #4caf50;
+            width: 100%;
+            color: white;
+        }
+
+        .memory-block.internal {
+            background-color: #ffeb3b;
+        }
+
+        .memory-block.external {
+            background-color: #e0e0e0;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simulação de Fragmentação de Memória</h1>
+    <p>Clique nos botões abaixo para visualizar os tipos de fragmentação de memória.</p>
+    <button onclick="showInternalFragmentation()">Fragmentação Interna</button>
+    <button onclick="showExternalFragmentation()">Fragmentação Externa</button>
+    
+    <div class="memory-container" id="memoryContainer"></div>
+
+    <script>
+        const memoryContainer = document.getElementById("memoryContainer");
+
+        function clearMemory() {
+            memoryContainer.innerHTML = '';
+        }
+
+        function showInternalFragmentation() {
+            clearMemory();
+            // Criando blocos de memória com fragmentação interna
+            const blocks = [
+                { size: 100, used: 70 },
+                { size: 100, used: 50 },
+                { size: 100, used: 80 },
+                { size: 100, used: 90 },
+            ];
+
+            blocks.forEach(block => {
+                const blockElement = document.createElement("div");
+                blockElement.className = "memory-block internal";
+                blockElement.innerHTML = `<div class="used" style="height: ${block.used}%;"></div>`;
+                blockElement.innerHTML += `<span>${block.used}KB / ${block.size}KB</span>`;
+                memoryContainer.appendChild(blockElement);
+            });
+        }
+
+        function showExternalFragmentation() {
+            clearMemory();
+            // Criando blocos de memória com fragmentação externa
+            const blocks = [
+                { size: 100, used: 100 },
+                { size: 100, used: 0 },
+                { size: 100, used: 100 },
+                { size: 100, used: 0 },
+            ];
+
+            blocks.forEach(block => {
+                const blockElement = document.createElement("div");
+                blockElement.className = block.used === 0 ? "memory-block external" : "memory-block";
+                if (block.used > 0) {
+                    blockElement.innerHTML = `<div class="used" style="height: ${block.used}%;"></div>`;
+                }
+                blockElement.innerHTML += `<span>${block.used}KB / ${block.size}KB</span>`;
+                memoryContainer.appendChild(blockElement);
+            });
+        }
+    </script>
+</body>
+</html>
